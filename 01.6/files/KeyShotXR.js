@@ -32,9 +32,9 @@ navigator.appVersion.indexOf("MSIE")&&(a=p);return a}function Ka(){var a=documen
 function I(){ a.Ua(window.innerWidth, window.innerHeight); }
 function oa(a,f){q.start.x=a;q.start.y=f;q.a.x=a;q.a.y=f;i.a.x=a;i.a.y=f}
 function pa(a,f){q.b.x=a-q.a.x;q.b.y=f-q.a.y;q.n.x=a;q.n.y=f;q.a.x=a;q.a.y=f}
-function F(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d|=1:1<f&&(j.d|=2);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}
-function J(d){d||(d=window.event);var f=H();a.cursor.x=d.pageX-f.x+m.left;a.cursor.y=d.pageY-f.y+m.top;d.preventDefault?d.preventDefault():d.returnValue=u;0<j.d&&(1==j.d?pa(d.pageX,d.pageY):2==j.d?(d=a.cursor.y-E.start.y,f=a.w(),a.T(c.u*Math.exp(d/200)),d=a.w(),c.k+=parseFloat(a.e*f-a.e*d),c.l+=parseFloat(a.f*f-a.f*d)):3==j.d&&(f=a.cursor.x-E.start.x,d=a.cursor.y-E.start.y,c.k+=parseFloat((f-c.m.x)/c.g),c.l+=parseFloat((d-c.m.y)/c.g),c.m.x=f,c.m.y=d))}
-function O(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d&=-2:1<f&&(j.d&=-3);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}
+function F(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d|=1:2==f?j.d|=2:3==f&&(j.d|=3);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}
+function J(d){d||(d=window.event);var f=H();a.cursor.x=d.pageX-f.x+m.left;a.cursor.y=d.pageY-f.y+m.top;d.preventDefault?d.preventDefault():d.returnValue=u;0<j.d&&(1==j.d?pa(d.pageX,d.pageY):2==j.d?(d=a.cursor.y-E.start.y,f=a.w(),a.T(c.u*Math.exp(d/200)),d=a.w(),c.k+=parseFloat(a.e*f-a.e*d),c.l+=parseFloat(a.f*f-a.f*d)):(3==j.d||4==j.d)&&(f=a.cursor.x-E.start.x,d=a.cursor.y-E.start.y,c.k+=parseFloat((f-c.m.x)/c.g),c.l+=parseFloat((d-c.m.y)/c.g),c.m.x=f,c.m.y=d))}
+function O(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d&=-2:2==f?j.d&=-3:3==f&&(j.d&=-4);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}
 function R(d){a.ab&&(d=d?d:window.event,a.Ha(0>(d.detail?-1*d.detail:d.wheelDelta/40)?1:-1),qa(d))}
 function la(d){
     d||(d=window.event);
