@@ -9,7 +9,7 @@ navigator.appVersion.indexOf("MSIE")&&(a=p);return a}function Ka(){var a=documen
     if(a.i){
         l.removeAttribute("height");
         l.style.width="100%";
-        l.style[N]="translateY(-50%) scale("+c.n+")";
+        l.style[N]="translateY(-50%) translate("+c.k+"px,"+c.l+"px) scale("+c.n+")";
         l.style.height="auto";
         l.style.position="absolute";
         l.style.top="50%";
