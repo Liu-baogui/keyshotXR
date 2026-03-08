@@ -29,12 +29,8 @@ navigator.appVersion.indexOf("MSIE")&&(a=p);return a}function Ka(){var a=documen
     }
 }
 function I(){
-    // 手机端特殊处理
-    if(a.isMobile){
-        a.Ua(window.innerWidth, window.innerHeight);
-    } else {
-        a.Ua(a.h.offsetWidth, a.h.offsetHeight);
-    }
+    // 始终使用窗口尺寸
+    a.Ua(window.innerWidth, window.innerHeight);
 }
 function oa(a,f){q.start.x=a;q.start.y=f;q.a.x=a;q.a.y=f;i.a.x=a;i.a.y=f}function pa(a,f){q.b.x=a-q.a.x;q.b.y=f-q.a.y;q.n.x=a;q.n.y=f;q.a.x=a;q.a.y=f}function F(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d|=1:1<f&&(j.d|=2);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}function J(d){d||(d=window.event);var f=H();a.cursor.x=d.pageX-f.x+m.left;a.cursor.y=d.pageY-f.y+m.top;d.preventDefault?d.preventDefault():d.returnValue=u;0<j.d&&(1==j.d?pa(d.pageX,d.pageY):2==j.d?(d=a.cursor.y-E.start.y,f=a.w(),a.T(c.u*
 Math.exp(d/200)),d=a.w(),c.k+=parseFloat(a.e*f-a.e*d),c.l+=parseFloat(a.f*f-a.f*d)):3==j.d&&(f=a.cursor.x-E.start.x,d=a.cursor.y-E.start.y,c.k+=parseFloat((f-c.m.x)/c.g),c.l+=parseFloat((d-c.m.y)/c.g),c.m.x=f,c.m.y=d))}function O(d){d||(d=window.event);var f=0;d.keyCode?f=d.keyCode:d.which&&(f=d.which);1==f?j.d&=-2:1<f&&(j.d&=-3);a.wa(d);d.preventDefault?d.preventDefault():d.returnValue=u}function R(d){a.ab&&(d=d?d:window.event,a.Ha(0>(d.detail?-1*d.detail:d.wheelDelta/40)?1:-1),qa(d))}function la(d){d||
@@ -57,35 +53,37 @@ function ja(d){
         var g=b[0].pageX-b[1].pageX;
         var i=b[0].pageY-b[1].pageY;
         
-        // 缩放
-        a.T(c.u/c.Va*Math.sqrt(g*g+i*i));
-        
-        g=a.w();
-        i=a.f*h-a.f*g;
-        c.k+=a.e*h-a.e*g;
-        c.l+=i;
+        // 计算新的缩放比例
+        var newScale = c.u/c.Va*Math.sqrt(g*g+i*i);
+        a.T(newScale);
         
         // 计算双指中心点位移
-        h=(a.cursor.x+b[1].pageX-e.x+m.left)/2-(j.ca.x+j.da.x)/2;
-        b=(a.cursor.y+b[1].pageY-e.y+m.top)/2-(j.ca.y+j.da.y)/2;
+        var centerX = (b[0].pageX + b[1].pageX) / 2 - e.x - m.left;
+        var centerY = (b[0].pageY + b[1].pageY) / 2 - e.y - m.top;
         
-        if(c.pa==u){
-            c.m.x=h;
-            c.m.y=b;
-            c.pa=p;
+        var prevCenterX = (j.ca.x + j.da.x) / 2;
+        var prevCenterY = (j.ca.y + j.da.y) / 2;
+        
+        var deltaX = centerX - prevCenterX;
+        var deltaY = centerY - prevCenterY;
+        
+        if(c.pa == u){
+            c.m.x = deltaX;
+            c.m.y = deltaY;
+            c.pa = p;
         }
         
-        // 双指拖动 - 修复手机端
-        var dragX = (h-c.m.x)/c.g;
-        var dragY = (b-c.m.y)/c.g;
+        // 双指拖动 - 修复位移计算
+        var dragX = (deltaX - c.m.x) / c.g;
+        var dragY = (deltaY - c.m.y) / c.g;
         
         c.k += dragX;
         c.l += dragY;
         
-        c.m.x=h;
-        c.m.y=b;
+        c.m.x = deltaX;
+        c.m.y = deltaY;
         
-        // 限制平移范围，防止画面移出视口
+        // 限制平移范围，确保画面不会移出视口
         var maxK = (C.width/2) * (c.n - 1) / c.g;
         var maxL = (C.height/2) * (c.n - 1) / c.g;
         
@@ -111,7 +109,7 @@ c.xa=c.k,c.ya=c.l,na()};this.eb=function(b){for(var f=-1E3,c=b,h=parseFloat(pars
 A+a.s+"/files/GoFixedSizeIcon.png")};this.v=function(b){
     a.i=b;
     if(a.i){
-        // 全屏模式 - 手机端优化
+        // 全屏模式
         v.style.position="fixed";
         v.style.left="0px";
         v.style.top="0px";
@@ -134,14 +132,11 @@ A+a.s+"/files/GoFixedSizeIcon.png")};this.v=function(b){
         a.h.style.margin="0";
         a.h.style.padding="0";
         
-        // 如果是手机端，强制更新视口尺寸
-        if(a.isMobile){
-            setTimeout(function(){
-                if(a.Ua){
-                    a.Ua(window.innerWidth, window.innerHeight);
-                }
-            }, 10);
-        }
+        // 重置边距
+        m.left = 0;
+        m.top = 0;
+        m.right = 0;
+        m.bottom = 0;
     }else{
         // 非全屏模式
         v.style.position="absolute";
@@ -185,41 +180,35 @@ e.J=p;a.Y==e.q&&(a.ha=0,a.La())};var T,S=t;this.wa=function(b){var f=H();a.curso
     }
 };
 this.cb=function(a,b,c,e){m.left=a;m.top=b;m.right=c;m.bottom=e;I()};this.Ua=function(b,c){
-    // 计算可用区域
-    var e=b-m.left-m.right;
-    var h=c-m.top-m.bottom;
+    // 直接使用传入的窗口尺寸
+    C.width = b;
+    C.height = c;
     
-    // 确保最小尺寸
-    e = Math.max(e, 100);
-    h = Math.max(h, 100);
-    
-    C.width=e;
-    C.height=h;
-    
-    s.style.width=e+"px";
-    s.style.height=h+"px";
-    s.style.left=m.left+"px";
-    s.style.top=m.top+"px";
+    // 设置样式
+    s.style.width = b + "px";
+    s.style.height = c + "px";
+    s.style.left = "0px";
+    s.style.top = "0px";
     
     // 更新变换
     na();
     
     // 更新容器大小
-    a.h.style.height=c+"px";
-    a.h.style.width=b+"px";
+    a.h.style.height = c + "px";
+    a.h.style.width = b + "px";
     
     // 更新热点区域
-    n.style.width=b+"px";
-    n.style.height=c+"px";
-    n.Ba&&n.Ba(b,c);
+    n.style.width = b + "px";
+    n.style.height = c + "px";
+    n.Ba && n.Ba(b, c);
     
-    ba&&(a.N.style.height=window.innerHeight+"px",a.N.style.width=window.innerWidth+"px");
+    ba && (a.N.style.height = window.innerHeight + "px", a.N.style.width = window.innerWidth + "px");
     
     // 重置缩放中心点相关变量
     c.pa = u;
     
-    // 手机端特殊处理：确保初始位置居中
-    if(a.isMobile && c.n == 1){
+    // 确保初始位置居中
+    if(c.n == 1){
         c.k = 0;
         c.l = 0;
         na();
@@ -248,12 +237,10 @@ b+=" width: "+window.innerWidth+"px;";b+=" height: "+window.innerHeight+"px;";b+
 // 强制全屏并重置
 setTimeout(function(){
     a.v(true);
-    if(a.isMobile){
-        // 手机端特殊处理：确保初始位置居中
-        c.k = 0;
-        c.l = 0;
-        a.T(1.0);
-        I();
-    }
+    // 重置位置
+    c.k = 0;
+    c.l = 0;
+    a.T(1.0);
+    I();
 },100);
 }else alert("Your browser must support HTML5 to show KeyShotXR")};
