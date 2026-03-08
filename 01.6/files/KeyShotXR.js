@@ -8,24 +8,36 @@ navigator.appVersion.indexOf("MSIE")&&(a=p);return a}function Ka(){var a=documen
     l.setAttribute("width",B.width);
     if(a.i){
         l.removeAttribute("height");
-        l.style.width="100%";
-        l.style[N]="scale("+c.n+")";
-        l.style.height="auto";
-        s.style["background-color"]=a.backgroundColor;
-        document.body.style["background-color"]=a.backgroundColor;
+        
+        // 手机端竖屏特殊处理：让图片高度充满，宽度自适应
+        if(a.isMobile && window.innerHeight > window.innerWidth) {
+            // 竖屏模式：高度100%，宽度自适应
+            l.style.height = "100%";
+            l.style.width = "auto";
+            l.style[N] = "scale(" + c.n + ")";
+        } else {
+            // 横屏模式：宽度100%，高度自适应
+            l.style.width = "100%";
+            l.style[N] = "scale(" + c.n + ")";
+            l.style.height = "auto";
+        }
+        
+        s.style["background-color"] = a.backgroundColor;
+        document.body.style["background-color"] = a.backgroundColor;
+        
         // 确保全屏时容器充满
-        a.h.style.width="100%";
-        a.h.style.height="100%";
-        a.h.style.position="fixed";
-        a.h.style.top="0";
-        a.h.style.left="0";
-    }else{
-        l.setAttribute("height",B.height);
-        l.style[N]="translate("+-B.width/2+"px,"+-B.height/2+"px) scale("+c.g+") translate("+0.5*C.width/c.g+"px,"+0.5*C.height/c.g+"px) translate("+c.k+"px,"+c.l+"px) scale("+c.n+")";
-        l.style["max-width"]="";
-        l.style.width="";
-        l.style.height="";
-        s.style["background-color"]=a.backgroundColor;
+        a.h.style.width = "100%";
+        a.h.style.height = "100%";
+        a.h.style.position = "fixed";
+        a.h.style.top = "0";
+        a.h.style.left = "0";
+    } else {
+        l.setAttribute("height", B.height);
+        l.style[N] = "translate(" + -B.width / 2 + "px," + -B.height / 2 + "px) scale(" + c.g + ") translate(" + 0.5 * C.width / c.g + "px," + 0.5 * C.height / c.g + "px) translate(" + c.k + "px," + c.l + "px) scale(" + c.n + ")";
+        l.style["max-width"] = "";
+        l.style.width = "";
+        l.style.height = "";
+        s.style["background-color"] = a.backgroundColor;
     }
 }
 function I(){
@@ -54,7 +66,7 @@ function ja(d){
         var i=b[0].pageY-b[1].pageY;
         
         // 计算新的缩放比例
-        var newScale = c.u/c.Va*Math.sqrt(g*g+i*i);
+        var newScale = c.u / c.Va * Math.sqrt(g * g + i * i);
         a.T(newScale);
         
         // 计算双指中心点位移
@@ -83,9 +95,18 @@ function ja(d){
         c.m.x = deltaX;
         c.m.y = deltaY;
         
-        // 限制平移范围，确保画面不会移出视口
-        var maxK = (C.width/2) * (c.n - 1) / c.g;
-        var maxL = (C.height/2) * (c.n - 1) / c.g;
+        // 限制平移范围，根据屏幕方向动态调整
+        var maxK, maxL;
+        
+        if(a.isMobile && window.innerHeight > window.innerWidth) {
+            // 竖屏模式：主要限制垂直方向的移动
+            maxK = (C.width / 2) * (c.n - 1) / c.g;
+            maxL = (C.height / 2) * (c.n - 1) / c.g * 1.5; // 垂直方向可以多移动一点
+        } else {
+            // 横屏模式
+            maxK = (C.width / 2) * (c.n - 1) / c.g;
+            maxL = (C.height / 2) * (c.n - 1) / c.g;
+        }
         
         // 确保范围不为负数
         maxK = Math.max(0, maxK);
@@ -110,64 +131,76 @@ A+a.s+"/files/GoFixedSizeIcon.png")};this.v=function(b){
     a.i=b;
     if(a.i){
         // 全屏模式
-        v.style.position="fixed";
-        v.style.left="0px";
-        v.style.top="0px";
-        v.style.width="100%";
-        v.style.height="100%";
-        v.style.margin="0";
-        v.style.padding="0";
+        v.style.position = "fixed";
+        v.style.left = "0px";
+        v.style.top = "0px";
+        v.style.width = "100%";
+        v.style.height = "100%";
+        v.style.margin = "0";
+        v.style.padding = "0";
         
-        document.body.style.overflow="hidden";
-        document.body.style.margin="0";
-        document.body.style.padding="0";
-        document.documentElement.style.overflow="hidden";
+        document.body.style.overflow = "hidden";
+        document.body.style.margin = "0";
+        document.body.style.padding = "0";
+        document.documentElement.style.overflow = "hidden";
         
         // 设置容器大小为视口大小
-        a.h.style.width="100%";
-        a.h.style.height="100%";
-        a.h.style.position="fixed";
-        a.h.style.top="0";
-        a.h.style.left="0";
-        a.h.style.margin="0";
-        a.h.style.padding="0";
+        a.h.style.width = "100%";
+        a.h.style.height = "100%";
+        a.h.style.position = "fixed";
+        a.h.style.top = "0";
+        a.h.style.left = "0";
+        a.h.style.margin = "0";
+        a.h.style.padding = "0";
         
         // 重置边距
         m.left = 0;
         m.top = 0;
         m.right = 0;
         m.bottom = 0;
-    }else{
+        
+        // 根据屏幕方向调整图片显示方式
+        na();
+    } else {
         // 非全屏模式
-        v.style.position="absolute";
-        var hPos=H();
-        v.style.left=window.pageXOffset-hPos.x+m.left+"px";
-        v.style.top=window.pageYOffset-hPos.y+m.top+"px";
-        document.body.style.overflow="hidden";
+        v.style.position = "absolute";
+        var hPos = H();
+        v.style.left = window.pageXOffset - hPos.x + m.left + "px";
+        v.style.top = window.pageYOffset - hPos.y + m.top + "px";
+        document.body.style.overflow = "hidden";
     }
     I();
 };
 this.Ka=function(){var b=new Image;b.src=a.O.src;a.G[a.Y]=b;b=a.C[a.Y];a.F[b]=a.z[b];a.z[b]=-1;a.Y++;
 e.J=p;a.Y==e.q&&(a.ha=0,a.La())};var T,S=t;this.wa=function(b){var f=H();a.cursor.x=b.pageX-f.x+m.left;a.cursor.y=b.pageY-f.y+m.top;1==j.d?oa(b.pageX,b.pageY):2==j.d?(E.start.x=a.cursor.x,E.start.y=a.cursor.y,c.u=a.w(),a.e=a.cursor.x-0.5*C.width,a.f=a.cursor.y-0.5*C.height,a.e*=a.R,a.f*=a.R,a.e-=c.k,a.f-=c.l,a.e/=c.u,a.f/=c.u):3==j.d&&(E.start.x=a.cursor.x,E.start.y=a.cursor.y,c.m.x=0,c.m.y=0)};this.Ha=function(b){a.T(c.n*Math.exp(-b/50))};this.w=function(){return c.n};this.T=function(a){
     // 缩放控制，保持中心点
-    a>c.la/c.g && (a=c.la/c.g);
-    a<c.ma/c.g && (a=c.ma/c.g);
+    a > c.la / c.g && (a = c.la / c.g);
+    a < c.ma / c.g && (a = c.ma / c.g);
     
     if (c.n != a) {
         // 计算当前中心点（基于视口中心）
-        var centerX = c.k + (C.width/2) / c.g;
-        var centerY = c.l + (C.height/2) / c.g;
+        var centerX = c.k + (C.width / 2) / c.g;
+        var centerY = c.l + (C.height / 2) / c.g;
         
         var scaleRatio = a / c.n;
         c.n = a;
         
         // 调整位移使中心点保持不变
-        c.k = centerX * scaleRatio - (C.width/2) / c.g;
-        c.l = centerY * scaleRatio - (C.height/2) / c.g;
+        c.k = centerX * scaleRatio - (C.width / 2) / c.g;
+        c.l = centerY * scaleRatio - (C.height / 2) / c.g;
         
-        // 限制平移范围，防止画面移出视口
-        var maxK = (C.width/2) * (c.n - 1) / c.g;
-        var maxL = (C.height/2) * (c.n - 1) / c.g;
+        // 限制平移范围，根据屏幕方向动态调整
+        var maxK, maxL;
+        
+        if(a.isMobile && window.innerHeight > window.innerWidth) {
+            // 竖屏模式：主要限制垂直方向的移动
+            maxK = (C.width / 2) * (c.n - 1) / c.g;
+            maxL = (C.height / 2) * (c.n - 1) / c.g * 1.5; // 垂直方向可以多移动一点
+        } else {
+            // 横屏模式
+            maxK = (C.width / 2) * (c.n - 1) / c.g;
+            maxL = (C.height / 2) * (c.n - 1) / c.g;
+        }
         
         // 确保范围不为负数
         maxK = Math.max(0, maxK);
@@ -208,7 +241,7 @@ this.cb=function(a,b,c,e){m.left=a;m.top=b;m.right=c;m.bottom=e;I()};this.Ua=fun
     c.pa = u;
     
     // 确保初始位置居中
-    if(c.n == 1){
+    if (c.n == 1) {
         c.k = 0;
         c.l = 0;
         na();
