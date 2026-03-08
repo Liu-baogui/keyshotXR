@@ -9,8 +9,10 @@ navigator.appVersion.indexOf("MSIE")&&(a=p);return a}function Ka(){var a=documen
     if(a.i){
         l.removeAttribute("height");
         l.style.width="100%";
-        l.style[N]="scale("+c.n+")";
+        l.style[N]="translateY(-50%) scale("+c.n+")";
         l.style.height="auto";
+        l.style.position="absolute";
+        l.style.top="50%";
         s.style["background-color"]=a.backgroundColor;
         document.body.style["background-color"]=a.backgroundColor;
         a.h.style.width="100%";
