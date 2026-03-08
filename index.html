@@ -8,20 +8,31 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!-- 【修改】添加 user-scalable=no 防止页面级缩放干扰 -->
+    <!-- 【优化】移动端视口设置，禁止缩放但保留XR内部手势 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>KeyShotXR</title>
     <style type="text/css">
-      body { 
+      html, body { 
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: fixed; /* 防止移动端滚动 */
         -ms-touch-action: pan-y pinch-zoom; /* 允许触摸板双指缩放 */
         touch-action: pan-y pinch-zoom; 
-        margin: 0;
-        overflow: hidden;
       }
       #KeyShotXR {
         width: 100vw;
         height: 100vh;
         touch-action: none; /* XR内部手势由JS处理 */
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      /* 确保全屏显示 */
+      body {
+        background-color: #000000;
       }
     </style>
     <script type="text/javascript" src="01.6/files/KeyShotXR.js"></script>
@@ -43,7 +54,7 @@
         var uStartIndex = 18;
         var vStartIndex = 0;
         
-        // 【关键修改】将 minZoom 设为小于1，maxZoom 设为大于1
+        // 设置缩放范围
         var minZoom = 0.5;  // 最小可缩放到 50%
         var maxZoom = 3;    // 最大可放大到 300%
         
@@ -61,9 +72,25 @@
         var isIBooksWidget = false;
         
         keyshotXR = new keyshotXR(nameOfDiv,folderName,viewPortWidth,viewPortHeight,backgroundColor,uCount,vCount,uWrap,vWrap,uMouseSensitivity,vMouseSensitivity,uStartIndex,vStartIndex,minZoom,maxZoom,rotationDamping,downScaleToBrowser,addDownScaleGUIButton,downloadOnInteraction,imageExtension,showLoading,loadingIcon,allowFullscreen,uReverse,vReverse,hotspots,isIBooksWidget);
+        
+        // 强制全屏显示
+        setTimeout(function() {
+          if (keyshotXR && keyshotXR.v) {
+            keyshotXR.v(true); // 确保全屏模式
+          }
+        }, 100);
       }
 
       window.onload = initKeyShotXR;
+      
+      // 处理横屏/竖屏变化
+      window.addEventListener('orientationchange', function() {
+        setTimeout(function() {
+          if (keyshotXR && keyshotXR.Ua) {
+            keyshotXR.Ua(window.innerWidth, window.innerHeight);
+          }
+        }, 100);
+      });
     </script>
   </head>
   <body oncontextmenu="return false;">
